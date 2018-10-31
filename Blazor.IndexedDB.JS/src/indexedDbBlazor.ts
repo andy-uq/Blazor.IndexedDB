@@ -32,6 +32,8 @@ export class IndexedDbManager {
         const tx = this.getTransaction(dbInstance, stName, 'readwrite');
         const objectStore = tx.objectStore(stName);
 
+        console.log(itemToSave);
+
         itemToSave = this.checkForKeyPath(objectStore, itemToSave);
 
         let returnValue = '';
