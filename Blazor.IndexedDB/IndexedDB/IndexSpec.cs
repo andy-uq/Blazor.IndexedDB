@@ -9,5 +9,6 @@
         public string KeyPath { get; set; }
         public bool? Unique { get; set; }
         public bool Auto { get; set; }
+        public bool MultiEntry { get; set; }
     }
 }

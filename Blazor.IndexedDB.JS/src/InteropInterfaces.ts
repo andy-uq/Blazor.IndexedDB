@@ -36,6 +36,7 @@ export interface IIndexSpec {
     name: string;
     keyPath: string;
     unique?: boolean;
+    multiEntry: boolean;
     auto: boolean;
 }
 
