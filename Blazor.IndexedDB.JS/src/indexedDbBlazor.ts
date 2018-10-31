@@ -32,14 +32,28 @@ export class IndexedDbManager {
         const tx = this.getTransaction(dbInstance, stName, 'readwrite');
         const objectStore = tx.objectStore(stName);
 
-        console.log(itemToSave);
-
         itemToSave = this.checkForKeyPath(objectStore, itemToSave);
 
         let returnValue = '';
         const result = await objectStore.add(itemToSave, record.key);
         returnValue = `Added new record with id ${result}`;
 
+        return returnValue;
+    }
+
+    public addRecords = async (stName: string, records: IStoreRecord[]): Promise<string> => {
+        const dbInstance = await this.dbPromise;
+        const tx = this.getTransaction(dbInstance, stName, 'readwrite');
+        const objectStore = tx.objectStore(stName);
+
+        for (let i = 0; i < records.length; i++) {
+            const record = records[i];
+            let itemToSave = record.data;
+            itemToSave = this.checkForKeyPath(objectStore, itemToSave);
+            await objectStore.add(itemToSave, record.key);
+        }
+
+        var returnValue = `Added ${records.length} new records`;
         return returnValue;
     }
 
@@ -128,7 +142,12 @@ export class IndexedDbManager {
         const tx = dbInstance.transaction(stName, mode);
         tx.complete.catch(
             err => {
-                console.log((err as Error).message);
+                var typedError = (err as Error);
+                if (typedError) {
+                    console.log(typedError.message, typedError);
+                } else {
+                    console.log(err);
+                }
             });
 
         return tx;

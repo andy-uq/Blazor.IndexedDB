@@ -56,6 +56,22 @@ namespace TG.Blazor.IndexedDB
             }
         }
 
+        
+
+        public async Task AddRecords<T>(string storeName, IEnumerable<StoreRecord<T>> recordsToAdd)
+        {
+            await EnsureDbOpen();
+            try
+            {
+                var result = await CallJavascript<string>(DbFunctions.AddRecords, storeName, recordsToAdd);
+                RaiseNotification(IndexDBActionOutCome.Successful, result);
+            }
+            catch (JSException e)
+            {
+                RaiseNotification(IndexDBActionOutCome.Failed, e.Message);
+            }
+        }
+
         public async Task UpdateRecord<T>(StoreRecord<T> recordToUpdate)
         {
             await EnsureDbOpen();
@@ -177,6 +193,7 @@ namespace TG.Blazor.IndexedDB
         {
             Console.WriteLine($"called from JS: {message}");
         }
+
         private async Task<TResult> CallJavascript<TData, TResult>(string functionName, TData data)
         {
             return await JSRuntime.Current.InvokeAsync<TResult>($"{InteropPrefix}.{functionName}", data);

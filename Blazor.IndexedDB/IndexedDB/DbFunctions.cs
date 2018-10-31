@@ -7,6 +7,7 @@
     {
         public const string CreateDb = "createDb";
         public const string AddRecord = "addRecord";
+        public const string AddRecords = "addRecords";
         public const string UpdateRecord = "updateRecord";
         public const string GetRecords = "getRecords";
         public const string OpenDb = "openDb";
